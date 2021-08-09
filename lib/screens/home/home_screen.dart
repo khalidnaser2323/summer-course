@@ -33,19 +33,29 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
       ),
-      body: Center(
-        child: CustomeCard(
-          cardModel: new CustomCardModel(
-            title: "Ahmed Mohamed",
-            subtitle: "a.mohamed@gmail.com",
-            image:
-                "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png",
-            onCardClick: () {
-              print("Hello from parent");
-            },
-          ),
-        ),
-      ),
+      body: getUsersGrid(),
+    );
+  }
+
+  Widget getUsersGrid() {
+    return GridView.count(
+      crossAxisCount: 2,
+      padding: EdgeInsets.all(16),
+      mainAxisSpacing: 10,
+      crossAxisSpacing: 10,
+      children: List.generate(
+          20,
+          (index) => CustomeCard(
+                cardModel: new CustomCardModel(
+                  title: "Ahmed Mohamed",
+                  subtitle: "a.mohamed@gmail.com",
+                  image:
+                      "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png",
+                  onCardClick: () {
+                    print("Hello from parent");
+                  },
+                ),
+              )),
     );
   }
 }

@@ -19,8 +19,9 @@ class CustomeCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.network(
-                "${this.cardModel.image}",
+              FadeInImage.assetNetwork(
+                placeholder: "assets/images/user-placeholder.jpeg",
+                image: "${this.cardModel.image}",
                 width: 75.0,
                 height: 75.0,
               ),
