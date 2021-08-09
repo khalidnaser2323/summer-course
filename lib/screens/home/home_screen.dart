@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:iti_summer_course_tutorial/components/custom_card.dart';
+import 'package:iti_summer_course_tutorial/models/custom_card_model.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -32,14 +34,16 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text("Your current count state is"),
-            Text("$_counter"),
-          ],
+        child: CustomeCard(
+          cardModel: new CustomCardModel(
+            title: "Ahmed Mohamed",
+            subtitle: "a.mohamed@gmail.com",
+            image:
+                "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png",
+            onCardClick: () {
+              print("Hello from parent");
+            },
+          ),
         ),
       ),
     );
