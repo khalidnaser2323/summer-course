@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iti_summer_course_tutorial/components/custom_card.dart';
+import 'package:iti_summer_course_tutorial/data/users_repo.dart';
 import 'package:iti_summer_course_tutorial/models/custom_card_model.dart';
+import 'package:iti_summer_course_tutorial/models/user.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -11,6 +13,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _counter = 0;
+  late Future<List<User>> usersFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    usersFuture = UsersRepo().getUsers();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,24 +47,40 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget getUsersGrid() {
-    return GridView.count(
-      crossAxisCount: 2,
-      padding: EdgeInsets.all(16),
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
-      children: List.generate(
-          20,
-          (index) => CustomeCard(
-                cardModel: new CustomCardModel(
-                  title: "Ahmed Mohamed",
-                  subtitle: "a.mohamed@gmail.com",
-                  image:
-                      "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png",
-                  onCardClick: () {
-                    print("Hello from parent");
-                  },
-                ),
-              )),
-    );
+    return FutureBuilder<List<User>>(
+        future: usersFuture,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                snapshot.error.toString(),
+              ),
+            );
+          } else if (snapshot.hasData) {
+            List<User> users = snapshot.data!;
+            return GridView.count(
+              crossAxisCount: 2,
+              padding: EdgeInsets.all(16),
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              children: List.generate(
+                  users.length,
+                  (index) => CustomeCard(
+                        cardModel: new CustomCardModel(
+                          title: users[index].firstName,
+                          subtitle: users[index].email,
+                          image: users[index].image,
+                          onCardClick: () {
+                            print("Clicked user id ${users[index].id}");
+                          },
+                        ),
+                      )),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 }
