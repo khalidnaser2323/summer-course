@@ -3,6 +3,8 @@ import 'package:iti_summer_course_tutorial/components/custom_card.dart';
 import 'package:iti_summer_course_tutorial/data/users_repo.dart';
 import 'package:iti_summer_course_tutorial/models/custom_card_model.dart';
 import 'package:iti_summer_course_tutorial/models/user.dart';
+import 'package:iti_summer_course_tutorial/screens/details/details_screen.dart';
+import 'package:iti_summer_course_tutorial/screens/registeration/registration_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -37,9 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Icons.add,
         ),
         onPressed: () {
-          setState(() {
-            _counter++;
-          });
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => RegisterationScreen()));
         },
       ),
       body: getUsersGrid(),
@@ -72,6 +73,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           image: users[index].image,
                           onCardClick: () {
                             print("Clicked user id ${users[index].id}");
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => UserDetailsScreen(
+                                  selectedUser: users[index],
+                                ),
+                              ),
+                            );
                           },
                         ),
                       )),
