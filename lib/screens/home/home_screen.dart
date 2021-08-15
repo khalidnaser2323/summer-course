@@ -38,13 +38,20 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Icon(
           Icons.add,
         ),
-        onPressed: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => RegisterationScreen()));
-        },
+        onPressed: _navigateToRegistration,
       ),
       body: getUsersGrid(),
     );
+  }
+
+  void _navigateToRegistration() async {
+    bool registerationResult = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => RegisterationScreen()));
+    if (registerationResult != null && registerationResult) {
+      setState(() {
+        usersFuture = UsersRepo().getUsers();
+      });
+    }
   }
 
   Widget getUsersGrid() {

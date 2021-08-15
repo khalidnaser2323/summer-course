@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:iti_summer_course_tutorial/data/users_repo.dart';
+import 'package:iti_summer_course_tutorial/models/registeration.dart';
 
 class RegisterationScreen extends StatefulWidget {
   @override
@@ -8,13 +10,39 @@ class RegisterationScreen extends StatefulWidget {
 class _RegisterationScreenState extends State<RegisterationScreen> {
   String? _email, _password;
   final _formKey = GlobalKey<FormState>();
-  _submitForm() {
+  bool _isLoading = false;
+  _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      print("Valid form $_email, $_password");
+      try {
+        setState(() {
+          _isLoading = true;
+        });
+        _formKey.currentState!.save();
+        print("Valid form $_email, $_password");
+        RegistrationRequest registrationRequest =
+            new RegistrationRequest(email: _email!, password: _password!);
+        RegistrationResponse response =
+            await UsersRepo().registerNewUser(registrationRequest);
+        setState(() {
+          _isLoading = false;
+        });
+        _showSnackBar("Your registration token is ${response.token}");
+        Navigator.of(context).pop(true);
+        print("Registeration response $response");
+      } catch (error) {
+        setState(() {
+          _isLoading = true;
+        });
+        _showSnackBar(error.toString());
+      }
     } else {
       print("Form is not valid");
     }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -70,9 +98,9 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
                   if (value == null || value.isEmpty) {
                     return "Please enter your password";
                   }
-                  if (value.length < 8) {
-                    return "Password must be greater than 8 characters";
-                  }
+                  // if (value.length < 8) {
+                  //   return "Password must be greater than 8 characters";
+                  // }
                 },
                 decoration: InputDecoration(
                   labelText: "Your Password",
@@ -84,7 +112,10 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
               SizedBox(
                 height: 10,
               ),
-              ElevatedButton(onPressed: _submitForm, child: Text("Submit")),
+              _isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : ElevatedButton(
+                      onPressed: _submitForm, child: Text("Submit")),
             ],
           ),
         ));
