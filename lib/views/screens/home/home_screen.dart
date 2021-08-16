@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:iti_summer_course_tutorial/components/custom_card.dart';
+import 'package:iti_summer_course_tutorial/views/components/custom_card.dart';
 import 'package:iti_summer_course_tutorial/data/users_repo.dart';
 import 'package:iti_summer_course_tutorial/models/custom_card_model.dart';
 import 'package:iti_summer_course_tutorial/models/user.dart';
-import 'package:iti_summer_course_tutorial/screens/details/details_screen.dart';
-import 'package:iti_summer_course_tutorial/screens/registeration/registration_screen.dart';
+import 'package:iti_summer_course_tutorial/views/screens/details/details_screen.dart';
+import 'package:iti_summer_course_tutorial/views/screens/registeration/registration_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

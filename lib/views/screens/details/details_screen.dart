@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:iti_summer_course_tutorial/data/users_repo.dart';
-import 'package:iti_summer_course_tutorial/models/registeration.dart';
+import 'package:iti_summer_course_tutorial/models/user_update.dart';
+import 'package:iti_summer_course_tutorial/views/components/custom_card.dart';
+import 'package:iti_summer_course_tutorial/models/custom_card_model.dart';
+import 'package:iti_summer_course_tutorial/models/user.dart';
 
-class RegisterationScreen extends StatefulWidget {
+class UserDetailsScreen extends StatefulWidget {
+  final User selectedUser;
+  UserDetailsScreen({required this.selectedUser});
+
   @override
-  _RegisterationScreenState createState() => _RegisterationScreenState();
+  _UserDetailsScreenState createState() => _UserDetailsScreenState();
 }
 
-class _RegisterationScreenState extends State<RegisterationScreen> {
-  String? _email, _password;
+class _UserDetailsScreenState extends State<UserDetailsScreen> {
+  String? _name, _job;
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
+
   _submitForm() async {
     if (_formKey.currentState!.validate()) {
       try {
@@ -18,20 +25,21 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
           _isLoading = true;
         });
         _formKey.currentState!.save();
-        print("Valid form $_email, $_password");
-        RegistrationRequest registrationRequest =
-            new RegistrationRequest(email: _email!, password: _password!);
-        RegistrationResponse response =
-            await UsersRepo().registerNewUser(registrationRequest);
+        print("Valid form $_name, $_job");
+        UserUpdateModel userUpdateModel =
+            new UserUpdateModel(name: _name!, job: _job!);
+        UsersRepo usersRepo = new UsersRepo();
+        UserUpdateModel response =
+            await usersRepo.updateUser(widget.selectedUser.id, userUpdateModel);
         setState(() {
           _isLoading = false;
         });
-        _showSnackBar("Your registration token is ${response.token}");
+        _showSnackBar("Updated user successfully");
         Navigator.of(context).pop(true);
-        print("Registeration response $response");
+        print("Update user response $response");
       } catch (error) {
         setState(() {
-          _isLoading = true;
+          _isLoading = false;
         });
         _showSnackBar(error.toString());
       }
@@ -49,7 +57,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Register new user"),
+        title: Text("Edit user"),
       ),
       body: _getRegistrationForm(),
     );
@@ -63,23 +71,21 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
           child: Column(
             children: [
               TextFormField(
-                keyboardType: TextInputType.emailAddress,
+                keyboardType: TextInputType.text,
+                initialValue: widget.selectedUser.firstName,
                 onFieldSubmitted: (String? value) {
-                  _email = value;
+                  _name = value;
                 },
                 onSaved: (String? value) {
-                  _email = value;
+                  _name = value;
                 },
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return "Please enter your email";
-                  }
-                  if (!value.contains("@")) {
-                    return "Please enter a valid email";
+                    return "Please enter your name";
                   }
                 },
                 decoration: InputDecoration(
-                  labelText: "Your email",
+                  labelText: "User name",
                 ),
               ),
               SizedBox(
@@ -87,23 +93,19 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
               ),
               TextFormField(
                 keyboardType: TextInputType.text,
-                obscureText: true,
                 onFieldSubmitted: (String? value) {
-                  _password = value;
+                  _job = value;
                 },
                 onSaved: (String? value) {
-                  _password = value;
+                  _job = value;
                 },
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return "Please enter your password";
+                    return "Please enter your job";
                   }
-                  // if (value.length < 8) {
-                  //   return "Password must be greater than 8 characters";
-                  // }
                 },
                 decoration: InputDecoration(
-                  labelText: "Your Password",
+                  labelText: "Your Job",
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
                   ),

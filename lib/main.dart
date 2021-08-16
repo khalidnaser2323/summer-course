@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iti_summer_course_tutorial/screens/home/home_screen.dart';
+import 'package:iti_summer_course_tutorial/views/screens/home/home_screen.dart';
 
 void main() {
   runApp(getMyAppRootWidget());
