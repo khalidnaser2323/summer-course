@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iti_summer_course_tutorial/data/users_repo.dart';
+import 'package:iti_summer_course_tutorial/data/authentication_repo.dart';
 import 'package:iti_summer_course_tutorial/models/registeration.dart';
 
 class RegisterationScreen extends StatefulWidget {
@@ -19,10 +19,10 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
         });
         _formKey.currentState!.save();
         print("Valid form $_email, $_password");
-        RegistrationRequest registrationRequest =
-            new RegistrationRequest(email: _email!, password: _password!);
-        RegistrationResponse response =
-            await UsersRepo().registerNewUser(registrationRequest);
+        AuthenticationRequest registrationRequest =
+            new AuthenticationRequest(email: _email!, password: _password!);
+        AuthenticationResponse response =
+            await AuthenticationRepo().registerNewUser(registrationRequest);
         setState(() {
           _isLoading = false;
         });

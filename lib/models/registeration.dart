@@ -1,6 +1,6 @@
-class RegistrationRequest {
+class AuthenticationRequest {
   String email, password;
-  RegistrationRequest({required this.email, required this.password});
+  AuthenticationRequest({required this.email, required this.password});
   Map toJson() {
     Map<String, dynamic> json = {
       "email": this.email,
@@ -10,11 +10,11 @@ class RegistrationRequest {
   }
 }
 
-class RegistrationResponse {
-  int id;
+class AuthenticationResponse {
+  int? id;
   String token;
-  RegistrationResponse({required this.id, required this.token});
-  factory RegistrationResponse.fromJson(Map json) {
-    return RegistrationResponse(id: json['id'], token: json['token']);
+  AuthenticationResponse({this.id, required this.token});
+  factory AuthenticationResponse.fromJson(Map json) {
+    return AuthenticationResponse(id: json['id'], token: json['token']);
   }
 }

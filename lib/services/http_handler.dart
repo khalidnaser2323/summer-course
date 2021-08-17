@@ -34,6 +34,9 @@ class HttpWrapper implements HttpWrapperInterface {
     print('Response body: ${response.body}');
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
+    } else if (response.statusCode == 400) {
+      Map responseJson = jsonDecode(response.body);
+      throw responseJson['error'];
     } else {
       throw Exception("Somthing wrong happened, please try again later");
     }
